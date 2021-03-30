@@ -1,27 +1,40 @@
 const cds = require("@sap/cds");
 
-const { Productos, OrdenDetalle } = cds.entities;
+const { Productos, OrdenDetalles } = cds.entities;
 
 module.exports = cds.service.impl(async (srv) => {
     srv.before('CREATE', 'OrdenDetalles', async (req) => {
         console.log("Stock se puede usar");
         const cantidades = req.data;
+        console.log(cantidades);
         const stock = await stockActual(cantidades);
         if (stock) {
-            if(stock.stockAnterior < stock.stockActualmente)
-            return "Error el stock ha solicitar es mayor al diponible";
-        } else {
-            return "Se pudo realizar su pedido, vuelva pronto!";
+            if(stock.stockAnterior < cantidades.UnitsInStock){
+                return "Error el stock ha solicitar es mayor al diponible";    
+            }else {
+                try{
+                    await cds.run(UPDATE('Productos').set({ UnitsOnOrder: { '+=': cantidades.UnitsInStock },UnitsInStock : {'-=': cantidades.UnitsInStock}}).where({ ProductID: cantidades.ProductID_ProductID }));
+                }catch(err){
+                    console.log(err);
+                    return err;
+                }
+                return "Se pudo realizar su pedido, vuelva pronto!";
+            }
+        }else{
+            console.log("FALLO");
         }
     });
 
-    async function stockActual(){
-        const stock = await cds.run(SELECT.one.from(Productos).where({ ID: ProductID }));
+    async function stockActual(cantidades){
+        console.log("entrando a stockactual!");
+        //console.log(cantidades.ProductID);
+        console.log(cantidades);
+        const stock = await cds.run(SELECT.one(Productos).where({ ProductID: cantidades.ProductID_ProductID }));
         if(stock) {
-            stockNow = (stock.UnitsOnOrder + UnitsInStock);
+            stockenOrdenes = (stock.UnitsOnOrder + cantidades.UnitsInStock);
             return {
-                stockAnterior: stock.UnitsOnOrder,
-                stockActualmente: stockNow 
+                stockAnterior: stock.UnitsInStock,
+                stockActualmente: stockenOrdenes
             }
         }
     }
