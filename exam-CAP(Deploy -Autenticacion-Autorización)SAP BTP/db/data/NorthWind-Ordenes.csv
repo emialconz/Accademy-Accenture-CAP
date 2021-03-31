@@ -1,0 +1,5 @@
+OrderID;RequiredDate;ShippedDate;ShipVia;Freight;ShipName;ShipAddress;ShipCity;ShipPostalCode;ShipCountry
+10248;"1996-08-01T00:00:00Z";"1996-07-16T00:00:00Z";3;32;"Vins et alcools Chevalier";"59 rue de l'Abbaye";"Reims";51100;"France"
+10249;"1996-08-16T00:00:00Z";"1996-07-10T00:00:00Z";1;11;"Toms Spezialitäten";"Luisenstr. 48";"Münster";44087;"Germany"
+10250;"1996-08-05T00:00:00Z";"1996-07-12T00:00:00Z";2;65;"Hanari Carnes";"Rua do Paço, 67";"Rio de Janeiro";05454876;"Brazil"
+10251;"1996-08-05T00:00:00Z";"1996-07-15T00:00:00Z";1;41;"Victuailles en stock";"2, rue du Commerce";"Lyon";69004;"France"
